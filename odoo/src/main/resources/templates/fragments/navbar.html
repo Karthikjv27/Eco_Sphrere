@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<nav th:fragment="navbar(activePage)" class="navbar navbar-expand-lg navbar-dark bg-success">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">EcoSphere ESG</a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
+                aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="mainNavbar">
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" th:classappend="${activePage == 'dashboard'} ? ' active' : ''" href="/">Dashboard</a>
+                <a class="nav-link" th:classappend="${activePage == 'departments'} ? ' active' : ''" href="/departments/page">Departments</a>
+                <a class="nav-link" th:classappend="${activePage == 'carbon'} ? ' active' : ''" href="/carbon/page">Carbon</a>
+                <a class="nav-link" th:classappend="${activePage == 'csr'} ? ' active' : ''" href="/csr/page">CSR</a>
+                <a class="nav-link" th:classappend="${activePage == 'goals'} ? ' active' : ''" href="/goals/page">Goals</a>
+                <a class="nav-link" th:classappend="${activePage == 'policies'} ? ' active' : ''" href="/policy/page">Policies</a>
+                <a class="nav-link" th:classappend="${activePage == 'reports'} ? ' active' : ''" href="/reports">Reports</a>
+                <a class="nav-link" href="/logout">Logout</a>
+            </div>
+        </div>
+    </div>
+</nav>
+</body>
+</html>

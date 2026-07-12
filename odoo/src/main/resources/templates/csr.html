@@ -10,21 +10,7 @@
 
 <body class="bg-light">
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-success">
-    <div class="container-fluid">
-
-        <a class="navbar-brand" href="/">🌍 EcoSphere ESG</a>
-
-        <div class="navbar-nav ms-auto">
-            <a class="nav-link" href="/">Dashboard</a>
-            <a class="nav-link" href="/departments/page">Departments</a>
-            <a class="nav-link" href="/carbon/page">Carbon</a>
-            <a class="nav-link" href="/goals/page">Goals</a>
-            <a class="nav-link active" href="/csr/page">CSR</a>
-        </div>
-
-    </div>
-</nav>
+<div th:replace="~{fragments/navbar :: navbar('csr')}"></div>
 
 <div class="container mt-4">
 
@@ -151,5 +137,6 @@
 
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

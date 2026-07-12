@@ -5,75 +5,123 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
           rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        .chart-card canvas {
+            max-height: 280px;
+        }
+    </style>
 </head>
 
 <body class="bg-light">
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-success">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="/">🌍 EcoSphere ESG</a>
-
-        <div class="navbar-nav ms-auto">
-            <a class="nav-link" href="/">Dashboard</a>
-            <a class="nav-link" href="/departments/page">Departments</a>
-            <a class="nav-link" href="/carbon/page">Carbon</a>
-            <a class="nav-link" href="/reports">Reports</a>
-        </div>
-    </div>
-</nav>
+<div th:replace="~{fragments/navbar :: navbar('dashboard')}"></div>
 
 <div class="container mt-4">
 
-    <div class="row">
+    <div class="row g-3">
 
-        <div class="col-md-6">
-
-            <div class="card shadow">
-
-                <div class="card-body">
-
-                    <h5>Total Departments</h5>
-
-                    <h2 class="text-primary"
-                        th:text="${departmentCount}"></h2>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="col-md-6">
-
-            <div class="card shadow">
-
-                <div class="card-body">
-
-                    <h5>Carbon Transactions</h5>
-
-                    <h2 class="text-success"
-                        th:text="${carbonCount}"></h2>
-
-                </div>
-
-            </div>
-
-        </div>
         <div class="col-md-4">
-
-            <div class="card shadow">
-
-                <div class="card-body text-center">
-
-                    <h5>Overall ESG Score</h5>
-
-                    <h1 class="text-success"
-                        th:text="${score.overallScore} + '%'"></h1>
-
+            <div class="card shadow h-100">
+                <div class="card-body">
+                    <h6 class="text-muted">Total Departments</h6>
+                    <h2 class="text-primary mb-0" th:text="${departmentCount}"></h2>
                 </div>
-
             </div>
+        </div>
 
+        <div class="col-md-4">
+            <div class="card shadow h-100">
+                <div class="card-body">
+                    <h6 class="text-muted">Carbon Transactions</h6>
+                    <h2 class="text-success mb-0" th:text="${carbonCount}"></h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow h-100">
+                <div class="card-body">
+                    <h6 class="text-muted">CSR Projects</h6>
+                    <h2 class="text-info mb-0" th:text="${csrCount}"></h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow h-100">
+                <div class="card-body">
+                    <h6 class="text-muted">Sustainability Goals</h6>
+                    <h2 class="text-warning mb-0" th:text="${goalCount}"></h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow h-100">
+                <div class="card-body">
+                    <h6 class="text-muted">ESG Policies</h6>
+                    <h2 class="text-secondary mb-0" th:text="${policyCount}"></h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow h-100">
+                <div class="card-body text-center">
+                    <h6 class="text-muted">Overall ESG Score</h6>
+                    <h1 class="text-success mb-0" th:text="${score.overallScore} + '%'"></h1>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row g-3 mt-1">
+
+        <div class="col-lg-6">
+            <div class="card shadow h-100 chart-card">
+                <div class="card-header">
+                    Carbon Trend
+                </div>
+                <div class="card-body">
+                    <canvas id="carbonTrendChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card shadow h-100 chart-card">
+                <div class="card-header">
+                    Department Emissions
+                </div>
+                <div class="card-body">
+                    <canvas id="departmentEmissionChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card shadow h-100 chart-card">
+                <div class="card-header">
+                    Goal Status
+                </div>
+                <div class="card-body">
+                    <canvas id="goalStatusChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card shadow h-100 chart-card">
+                <div class="card-header">
+                    CSR and Policy Summary
+                </div>
+                <div class="card-body">
+                    <canvas id="csrPolicyChart"></canvas>
+                </div>
+            </div>
         </div>
 
     </div>
@@ -106,7 +154,7 @@
 
                 <tbody>
 
-                <tr th:each="t : ${transactions}">
+                <tr th:each="t : ${recentTransactions}">
 
                     <td th:text="${t.id}"></td>
 
@@ -120,6 +168,12 @@
 
                 </tr>
 
+                <tr th:if="${#lists.isEmpty(recentTransactions)}">
+                    <td colspan="5" class="text-center text-muted">
+                        No carbon transactions recorded yet.
+                    </td>
+                </tr>
+
                 </tbody>
 
             </table>
@@ -129,6 +183,93 @@
     </div>
 
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script th:inline="javascript">
+    const carbonTrendLabels = /*[[${carbonTrendLabels}]]*/ [];
+    const carbonTrendData = /*[[${carbonTrendData}]]*/ [];
+    const departmentEmissionLabels = /*[[${departmentEmissionLabels}]]*/ [];
+    const departmentEmissionData = /*[[${departmentEmissionData}]]*/ [];
+    const goalStatusLabels = /*[[${goalStatusLabels}]]*/ [];
+    const goalStatusData = /*[[${goalStatusData}]]*/ [];
+    const csrPolicyLabels = /*[[${csrPolicyLabels}]]*/ [];
+    const csrPolicyData = /*[[${csrPolicyData}]]*/ [];
+
+    new Chart(document.getElementById('carbonTrendChart'), {
+        type: 'line',
+        data: {
+            labels: carbonTrendLabels,
+            datasets: [{
+                label: 'CO2 Emissions',
+                data: carbonTrendData,
+                borderColor: '#198754',
+                backgroundColor: 'rgba(25, 135, 84, 0.15)',
+                fill: true,
+                tension: 0.35
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    });
+
+    new Chart(document.getElementById('departmentEmissionChart'), {
+        type: 'bar',
+        data: {
+            labels: departmentEmissionLabels,
+            datasets: [{
+                label: 'CO2 Emissions',
+                data: departmentEmissionData,
+                backgroundColor: '#0d6efd'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    });
+
+    new Chart(document.getElementById('goalStatusChart'), {
+        type: 'pie',
+        data: {
+            labels: goalStatusLabels,
+            datasets: [{
+                data: goalStatusData,
+                backgroundColor: ['#ffc107', '#0d6efd', '#198754']
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+
+    new Chart(document.getElementById('csrPolicyChart'), {
+        type: 'doughnut',
+        data: {
+            labels: csrPolicyLabels,
+            datasets: [{
+                data: csrPolicyData,
+                backgroundColor: ['#0dcaf0', '#6c757d']
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+</script>
 
 </body>
 </html>
