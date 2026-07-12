@@ -5,15 +5,16 @@ import com.EcoSphere.odoo.environmental.carbon.service.CarbonTransactionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-
+import com.EcoSphere.odoo.scoring.service.ESGScoreService;
 @Controller
 public class DashboardController {
-
+    private final ESGScoreService esgScoreService;
     private final DepartmentService departmentService;
     private final CarbonTransactionService carbonTransactionService;
 
-    public DashboardController(DepartmentService departmentService,
+    public DashboardController(ESGScoreService esgScoreService, DepartmentService departmentService,
                                CarbonTransactionService carbonTransactionService) {
+        this.esgScoreService = esgScoreService;
         this.departmentService = departmentService;
         this.carbonTransactionService = carbonTransactionService;
     }
@@ -30,6 +31,7 @@ public class DashboardController {
         model.addAttribute("transactions",
                 carbonTransactionService.getAll());
 
+        model.addAttribute("score", esgScoreService.calculateScore());
         return "dashboard";
     }
 }
