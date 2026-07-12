@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Departments</title>
+</head>
+<body>
+
+<h2>Add Department</h2>
+
+<form action="/departments/save" method="post">
+
+    <label>Name</label><br>
+    <input type="text" name="name"><br><br>
+
+    <label>Description</label><br>
+    <input type="text" name="description"><br><br>
+
+    <button type="submit">Save</button>
+
+</form>
+
+<hr>
+
+<h2>Departments</h2>
+
+<table border="1">
+
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Description</th>
+    </tr>
+
+    <tr th:each="dept : ${departments}">
+        <td th:text="${dept.id}"></td>
+        <td th:text="${dept.name}"></td>
+        <td th:text="${dept.description}"></td>
+    </tr>
+
+</table>
+
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Carbon Transactions</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+</head>
+<body>
+
+<div class="container mt-5">
+
+    <h2 class="mb-4">Carbon Transactions</h2>
+
+    <div class="card mb-4">
+
+        <div class="card-header">
+            Add Carbon Transaction
+        </div>
+
+        <div class="card-body">
+
+            <form action="/carbon/save" method="post">
+
+                <div class="mb-3">
+                    <label class="form-label">Activity Name</label>
+                    <input type="text"
+                           class="form-control"
+                           name="activityName"
+                           required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Emission Value</label>
+                    <input type="number"
+                           step="0.01"
+                           class="form-control"
+                           name="emissionValue"
+                           required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Emission Unit</label>
+
+                    <select class="form-select"
+                            name="emissionUnit">
+
+                        <option>kg CO₂</option>
+                        <option>ton CO₂</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Transaction Date</label>
+
+                    <input type="date"
+                           class="form-control"
+                           name="transactionDate">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Department</label>
+
+                    <select class="form-select"
+                            name="departmentId">
+
+                        <option th:each="dept : ${departments}"
+                                th:value="${dept.id}"
+                                th:text="${dept.name}">
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <button class="btn btn-success">
+                    Save Transaction
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <table class="table table-bordered table-striped">
+
+        <thead class="table-dark">
+
+        <tr>
+
+            <th>ID</th>
+            <th>Activity</th>
+            <th>Emission</th>
+            <th>Unit</th>
+            <th>Date</th>
+            <th>Department</th>
+
+        </tr>
+
+        </thead>
+
+        <tbody>
+
+        <tr th:each="t : ${transactions}">
+
+            <td th:text="${t.id}"></td>
+
+            <td th:text="${t.activityName}"></td>
+
+            <td th:text="${t.emissionValue}"></td>
+
+            <td th:text="${t.emissionUnit}"></td>
+
+            <td th:text="${t.transactionDate}"></td>
+
+            <td th:text="${t.department.name}"></td>
+
+        </tr>
+
+        </tbody>
+
+    </table>
+
+</div>
+
+</body>
+</html>
