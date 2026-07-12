@@ -9,7 +9,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import com.EcoSphere.odoo.scoring.service.ESGScoreService;
+import lombok.*;
+
+
 @Controller
+
 public class DashboardController {
     private final ESGScoreService esgScoreService;
     private final DepartmentService departmentService;
