@@ -1,15 +1,38 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>EcoSphere Dashboard</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-          rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
         .chart-card canvas {
+            height: 280px;
             max-height: 280px;
+        }
+
+        .chart-card .card-body {
+            height: 320px;
+        }
+
+        .metric-card {
+            min-height: 150px;
+        }
+
+        .overview-banner {
+            background-image: linear-gradient(135deg, #198754 0%, #0d6efd 100%);
+            color: #fff;
+        }
+
+        .overview-banner .icon {
+            font-size: 2.5rem;
+            opacity: 0.85;
+        }
+
+        .notification-badge {
+            font-size: 0.8rem;
         }
     </style>
 </head>
@@ -20,77 +43,166 @@
 
 <div class="container mt-4">
 
-    <div class="row g-3">
-
-        <div class="col-md-4">
-            <div class="card shadow h-100">
-                <div class="card-body">
-                    <h6 class="text-muted">Total Departments</h6>
-                    <h2 class="text-primary mb-0" th:text="${departmentCount}"></h2>
-                </div>
+    <div class="card overview-banner shadow mb-4">
+        <div class="card-body row align-items-center">
+            <div class="col-lg-9">
+                <h1 class="fw-bold">Executive ESG Command Center</h1>
+                <p class="mb-2">Track carbon, CSR, goals, policies and notifications from one central dashboard.</p>
+                <p class="mb-0">Use the portal to monitor sustainability targets, discover risk signals, and take immediate action.</p>
+            </div>
+            <div class="col-lg-3 text-lg-end mt-3 mt-lg-0">
+                <i class="fas fa-globe-americas icon"></i>
             </div>
         </div>
-
-        <div class="col-md-4">
-            <div class="card shadow h-100">
-                <div class="card-body">
-                    <h6 class="text-muted">Carbon Transactions</h6>
-                    <h2 class="text-success mb-0" th:text="${carbonCount}"></h2>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="card shadow h-100">
-                <div class="card-body">
-                    <h6 class="text-muted">CSR Projects</h6>
-                    <h2 class="text-info mb-0" th:text="${csrCount}"></h2>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="card shadow h-100">
-                <div class="card-body">
-                    <h6 class="text-muted">Sustainability Goals</h6>
-                    <h2 class="text-warning mb-0" th:text="${goalCount}"></h2>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="card shadow h-100">
-                <div class="card-body">
-                    <h6 class="text-muted">ESG Policies</h6>
-                    <h2 class="text-secondary mb-0" th:text="${policyCount}"></h2>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="card shadow h-100">
-                <div class="card-body text-center">
-                    <h6 class="text-muted">Overall ESG Score</h6>
-                    <h1 class="text-success mb-0" th:text="${score.overallScore} + '%'"></h1>
-                </div>
-            </div>
-        </div>
-
     </div>
 
-    <div class="row g-3 mt-1">
+    <div class="row g-3 mb-4">
+        <div class="col-md-6 col-xl-3">
+            <div class="card shadow metric-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                            <small class="text-muted">Total Departments</small>
+                            <h3 class="mt-2" th:text="${departmentCount}"></h3>
+                        </div>
+                        <i class="fas fa-building fa-2x text-primary"></i>
+                    </div>
+                    <div class="progress" style="height: 6px;">
+                        <div class="progress-bar bg-primary" style="width: 75%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-xl-3">
+            <div class="card shadow metric-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                            <small class="text-muted">Carbon Records</small>
+                            <h3 class="mt-2" th:text="${carbonCount}"></h3>
+                        </div>
+                        <i class="fas fa-leaf fa-2x text-success"></i>
+                    </div>
+                    <div class="progress" style="height: 6px;">
+                        <div class="progress-bar bg-success" style="width: 60%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-xl-3">
+            <div class="card shadow metric-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                            <small class="text-muted">Unread Alerts</small>
+                            <h3 class="mt-2" th:text="${unreadNotificationCount}"></h3>
+                        </div>
+                        <i class="fas fa-bell fa-2x text-warning"></i>
+                    </div>
+                    <div class="progress" style="height: 6px;">
+                        <div class="progress-bar bg-warning" style="width: 45%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-xl-3">
+            <div class="card shadow metric-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                            <small class="text-muted">Overall ESG Score</small>
+                            <h3 class="mt-2" th:text="${score.overallScore} + '%' "></h3>
+                        </div>
+                        <i class="fas fa-chart-line fa-2x text-info"></i>
+                    </div>
+                    <div class="progress" style="height: 6px;">
+                        <div class="progress-bar bg-info" style="width: 85%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        <div class="col-lg-6">
+    <div class="card shadow mb-4">
+        <div class="card-body">
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-start gap-3">
+                <div>
+                    <h5 class="mb-2">Quick Actions</h5>
+                    <p class="text-muted mb-0">Launch important ESG workflows in one click.</p>
+                </div>
+                <div class="d-flex flex-wrap gap-2">
+                    <a href="/carbon/page" class="btn btn-sm btn-light border">
+                        <i class="fas fa-database me-2"></i>Log Carbon
+                    </a>
+                    <a href="/goals/page" class="btn btn-sm btn-success">
+                        <i class="fas fa-bullseye me-2"></i>Create Goal
+                    </a>
+                    <a href="/csr/page" class="btn btn-sm btn-info text-white">
+                        <i class="fas fa-hands-helping me-2"></i>New CSR
+                    </a>
+                    <a href="/policy/page" class="btn btn-sm btn-secondary">
+                        <i class="fas fa-file-contract me-2"></i>Policy
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-xl-8">
             <div class="card shadow h-100 chart-card">
-                <div class="card-header">
-                    Carbon Trend
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span>Carbon Trend</span>
+                    <span class="badge bg-success">Last 6 months</span>
                 </div>
                 <div class="card-body">
                     <canvas id="carbonTrendChart"></canvas>
                 </div>
             </div>
         </div>
+        <div class="col-xl-4">
+            <div class="card shadow h-100">
+                <div class="card-header">
+                    Active Insights
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <h6>Upcoming Goals</h6>
+                        <p class="small text-muted">Goals approaching deadline in 21 days.</p>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item" th:each="goal : ${upcomingGoals}">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <strong th:text="${goal.goalName}"></strong>
+                                    <span class="badge bg-warning text-dark" th:text="${goal.targetDate}"></span>
+                                </div>
+                                <div class="small text-muted" th:text="${goal.description}"></div>
+                            </li>
+                            <li class="list-group-item text-muted" th:if="${#lists.isEmpty(upcomingGoals)}">
+                                No goals due soon.
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h6>Upcoming CSR Events</h6>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item" th:each="activity : ${upcomingCSRActivities}">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <strong th:text="${activity.title}"></strong>
+                                    <span class="badge bg-info text-dark" th:text="${activity.activityDate}"></span>
+                                </div>
+                                <div class="small text-muted" th:text="${activity.department.name}"></div>
+                            </li>
+                            <li class="list-group-item text-muted" th:if="${#lists.isEmpty(upcomingCSRActivities)}">
+                                No events in the next three weeks.
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <div class="row g-3 mt-3">
         <div class="col-lg-6">
             <div class="card shadow h-100 chart-card">
                 <div class="card-header">
@@ -101,7 +213,31 @@
                 </div>
             </div>
         </div>
+        <div class="col-lg-6">
+            <div class="card shadow h-100">
+                <div class="card-header">
+                    Recent Notifications
+                </div>
+                <div class="card-body">
+                    <div class="list-group">
+                        <div class="list-group-item" th:each="notification : ${notifications}">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h6 class="mb-1" th:text="${notification.title}"></h6>
+                                <span class="badge bg-secondary notification-badge" th:text="${notification.type}"></span>
+                            </div>
+                            <p class="mb-1 small" th:text="${notification.message}"></p>
+                            <small class="text-muted" th:text="${notification.createdAt}"></small>
+                        </div>
+                        <div class="list-group-item text-muted" th:if="${#lists.isEmpty(notifications)}">
+                            No unread notifications.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <div class="row g-3 mt-3">
         <div class="col-lg-6">
             <div class="card shadow h-100 chart-card">
                 <div class="card-header">
@@ -112,7 +248,6 @@
                 </div>
             </div>
         </div>
-
         <div class="col-lg-6">
             <div class="card shadow h-100 chart-card">
                 <div class="card-header">
@@ -123,63 +258,39 @@
                 </div>
             </div>
         </div>
-
     </div>
 
     <div class="card shadow mt-4">
-
         <div class="card-header">
-
             Recent Carbon Transactions
-
         </div>
-
         <div class="card-body">
-
-            <table class="table table-hover">
-
-                <thead>
-
-                <tr>
-
-                    <th>ID</th>
-                    <th>Activity</th>
-                    <th>Department</th>
-                    <th>Emission</th>
-                    <th>Date</th>
-
-                </tr>
-
-                </thead>
-
-                <tbody>
-
-                <tr th:each="t : ${recentTransactions}">
-
-                    <td th:text="${t.id}"></td>
-
-                    <td th:text="${t.activityName}"></td>
-
-                    <td th:text="${t.department.name}"></td>
-
-                    <td th:text="${t.emissionValue} + ' ' + ${t.emissionUnit}"></td>
-
-                    <td th:text="${t.transactionDate}"></td>
-
-                </tr>
-
-                <tr th:if="${#lists.isEmpty(recentTransactions)}">
-                    <td colspan="5" class="text-center text-muted">
-                        No carbon transactions recorded yet.
-                    </td>
-                </tr>
-
-                </tbody>
-
-            </table>
-
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>Activity</th>
+                        <th>Department</th>
+                        <th>Emission</th>
+                        <th>Date</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="t : ${recentTransactions}">
+                        <td th:text="${t.id}"></td>
+                        <td th:text="${t.activityName}"></td>
+                        <td th:text="${t.department.name}"></td>
+                        <td th:text="${t.emissionValue} + ' ' + ${t.emissionUnit}"></td>
+                        <td th:text="${t.transactionDate}"></td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(recentTransactions)}">
+                        <td colspan="5" class="text-center text-muted">No carbon transactions recorded yet.</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-
     </div>
 
 </div>

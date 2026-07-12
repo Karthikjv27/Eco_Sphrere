@@ -17,7 +17,7 @@
     <div class="card shadow">
 
         <div class="card-header">
-            <h4>Add Environmental Goal</h4>
+            <h4 class="mb-0">Add Environmental Goal</h4>
         </div>
 
         <div class="card-body">
@@ -53,7 +53,7 @@
                     <input type="text"
                            class="form-control"
                            name="targetUnit"
-                           placeholder="kg CO₂, %, Trees..."
+                           placeholder="kg CO2, %, Trees..."
                            required>
                 </div>
 
@@ -108,12 +108,13 @@
     <div class="card shadow mt-4">
 
         <div class="card-header">
-            <h4>Environmental Goals</h4>
+            <h4 class="mb-0">Environmental Goals</h4>
         </div>
 
         <div class="card-body">
 
-            <table class="table table-bordered table-hover">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover align-middle">
 
                 <thead class="table-success">
 
@@ -151,9 +152,16 @@
 
                 </tr>
 
+                <tr th:if="${#lists.isEmpty(goals)}">
+                    <td colspan="7" class="text-center text-muted">
+                        No environmental goals added yet.
+                    </td>
+                </tr>
+
                 </tbody>
 
-            </table>
+                </table>
+            </div>
 
         </div>
 

@@ -10,11 +10,11 @@
 
 <div th:replace="~{fragments/navbar :: navbar('carbon')}"></div>
 
-<div class="container mt-5">
+<div class="container mt-4">
 
     <h2 class="mb-4">Carbon Transactions</h2>
 
-    <div class="card mb-4">
+    <div class="card shadow mb-4">
 
         <div class="card-header">
             Add Carbon Transaction
@@ -47,8 +47,8 @@
                     <select class="form-select"
                             name="emissionUnit">
 
-                        <option>kg CO₂</option>
-                        <option>ton CO₂</option>
+                        <option>kg CO2</option>
+                        <option>ton CO2</option>
                     </select>
                 </div>
 
@@ -85,44 +85,60 @@
 
     </div>
 
-    <table class="table table-bordered table-striped">
+    <div class="card shadow">
+        <div class="card-header">
+            Carbon Transaction Records
+        </div>
 
-        <thead class="table-dark">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover align-middle">
 
-        <tr>
+                    <thead class="table-success">
 
-            <th>ID</th>
-            <th>Activity</th>
-            <th>Emission</th>
-            <th>Unit</th>
-            <th>Date</th>
-            <th>Department</th>
+                    <tr>
 
-        </tr>
+                        <th>ID</th>
+                        <th>Activity</th>
+                        <th>Emission</th>
+                        <th>Unit</th>
+                        <th>Date</th>
+                        <th>Department</th>
 
-        </thead>
+                    </tr>
 
-        <tbody>
+                    </thead>
 
-        <tr th:each="t : ${transactions}">
+                    <tbody>
 
-            <td th:text="${t.id}"></td>
+                    <tr th:each="t : ${transactions}">
 
-            <td th:text="${t.activityName}"></td>
+                        <td th:text="${t.id}"></td>
 
-            <td th:text="${t.emissionValue}"></td>
+                        <td th:text="${t.activityName}"></td>
 
-            <td th:text="${t.emissionUnit}"></td>
+                        <td th:text="${t.emissionValue}"></td>
 
-            <td th:text="${t.transactionDate}"></td>
+                        <td th:text="${t.emissionUnit}"></td>
 
-            <td th:text="${t.department.name}"></td>
+                        <td th:text="${t.transactionDate}"></td>
 
-        </tr>
+                        <td th:text="${t.department.name}"></td>
 
-        </tbody>
+                    </tr>
 
-    </table>
+                    <tr th:if="${#lists.isEmpty(transactions)}">
+                        <td colspan="6" class="text-center text-muted">
+                            No carbon transactions recorded yet.
+                        </td>
+                    </tr>
+
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+    </div>
 
 </div>
 

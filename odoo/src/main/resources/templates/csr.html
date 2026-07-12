@@ -17,7 +17,7 @@
     <div class="card shadow">
 
         <div class="card-header">
-            <h4>Add CSR Activity</h4>
+            <h4 class="mb-0">Add CSR Activity</h4>
         </div>
 
         <div class="card-body">
@@ -87,12 +87,13 @@
     <div class="card shadow mt-4">
 
         <div class="card-header">
-            <h4>CSR Activities</h4>
+            <h4 class="mb-0">CSR Activities</h4>
         </div>
 
         <div class="card-body">
 
-            <table class="table table-bordered table-hover">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover align-middle">
 
                 <thead class="table-success">
 
@@ -127,9 +128,16 @@
 
                 </tr>
 
+                <tr th:if="${#lists.isEmpty(activities)}">
+                    <td colspan="6" class="text-center text-muted">
+                        No CSR activities added yet.
+                    </td>
+                </tr>
+
                 </tbody>
 
-            </table>
+                </table>
+            </div>
 
         </div>
 

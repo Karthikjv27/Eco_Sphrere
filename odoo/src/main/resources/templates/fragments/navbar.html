@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <body>
 <nav th:fragment="navbar(activePage)" class="navbar navbar-expand-lg navbar-dark bg-success">
     <div class="container-fluid">
@@ -18,8 +18,14 @@
                 <a class="nav-link" th:classappend="${activePage == 'csr'} ? ' active' : ''" href="/csr/page">CSR</a>
                 <a class="nav-link" th:classappend="${activePage == 'goals'} ? ' active' : ''" href="/goals/page">Goals</a>
                 <a class="nav-link" th:classappend="${activePage == 'policies'} ? ' active' : ''" href="/policy/page">Policies</a>
+                <a class="nav-link" th:classappend="${activePage == 'notifications'} ? ' active' : ''" href="/notifications/page">Notifications</a>
                 <a class="nav-link" th:classappend="${activePage == 'reports'} ? ' active' : ''" href="/reports">Reports</a>
-                <a class="nav-link" href="/logout">Logout</a>
+                <sec:authorize access="isAuthenticated()">
+                    <a class="nav-link" href="/logout">Logout</a>
+                </sec:authorize>
+                <sec:authorize access="!isAuthenticated()">
+                    <a class="nav-link" href="/login">Login</a>
+                </sec:authorize>
             </div>
         </div>
     </div>

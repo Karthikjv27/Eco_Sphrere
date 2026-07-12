@@ -11,10 +11,12 @@ import com.EcoSphere.odoo.governance.policy.service.PolicyService;
 import com.EcoSphere.odoo.scoring.service.ESGScoreService;
 import com.EcoSphere.odoo.social.csr.entity.CSRActivity;
 import com.EcoSphere.odoo.social.csr.service.CSRActivityService;
+import com.EcoSphere.odoo.notification.service.NotificationService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
@@ -32,15 +34,17 @@ public class DashboardController {
     private final CSRActivityService csrService;
     private final PolicyService policyService;
     private final EnvironmentalGoalService goalService;
+    private final NotificationService notificationService;
 
     public DashboardController(ESGScoreService esgScoreService, DepartmentService departmentService,
-                               CarbonTransactionService carbonTransactionService, CSRActivityService csrService, PolicyService policyService, EnvironmentalGoalService goalService) {
+                               CarbonTransactionService carbonTransactionService, CSRActivityService csrService, PolicyService policyService, EnvironmentalGoalService goalService, NotificationService notificationService) {
         this.esgScoreService = esgScoreService;
         this.departmentService = departmentService;
         this.carbonTransactionService = carbonTransactionService;
         this.csrService = csrService;
         this.policyService = policyService;
         this.goalService = goalService;
+        this.notificationService = notificationService;
     }
 
     @GetMapping("/")
@@ -60,21 +64,33 @@ public class DashboardController {
                 .limit(5)
                 .toList();
 
+        List<EnvironmentalGoal> upcomingGoals = goals.stream()
+                .filter(goal -> goal.getTargetDate() != null)
+                .filter(goal -> !GoalStatus.COMPLETED.equals(goal.getStatus()))
+                .filter(goal -> !goal.getTargetDate().isBefore(LocalDate.now()))
+                .filter(goal -> goal.getTargetDate().isBefore(LocalDate.now().plusDays(21)))
+                .toList();
+
+        List<CSRActivity> upcomingCSRActivities = csrActivities.stream()
+                .filter(activity -> activity.getActivityDate() != null)
+                .filter(activity -> !activity.getActivityDate().isBefore(LocalDate.now()))
+                .filter(activity -> activity.getActivityDate().isBefore(LocalDate.now().plusDays(21)))
+                .toList();
+
+        long unreadNotificationCount = notificationService.countUnread();
+
         model.addAttribute("departmentCount", departmentService.getAllDepartments().size());
-
         model.addAttribute("carbonCount", transactions.size());
-
         model.addAttribute("transactions", transactions);
-
         model.addAttribute("recentTransactions", recentTransactions);
-
         model.addAttribute("score", esgScoreService.calculateScore());
-
         model.addAttribute("csrCount", csrActivities.size());
-
         model.addAttribute("policyCount", policies.size());
-
         model.addAttribute("goalCount", goals.size());
+        model.addAttribute("upcomingGoals", upcomingGoals);
+        model.addAttribute("upcomingCSRActivities", upcomingCSRActivities);
+        model.addAttribute("unreadNotificationCount", unreadNotificationCount);
+        model.addAttribute("notifications", notificationService.getUnread().stream().limit(4).toList());
 
         addChartData(model, transactions, goals, csrActivities, policies);
 
